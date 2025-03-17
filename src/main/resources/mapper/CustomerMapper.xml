@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.situ.hotel.mapper.CustomerMapper">
+    <insert id="insert">
+        insert into customer
+            (name,password,phone,idcard)
+        values (#{name},#{password},#{phone},#{idcard})
+    </insert>
+
+    <delete id="delete">
+        delete from customer
+        where customerid=#{customerid}
+    </delete>
+
+    <update id="update">
+        update customer
+        <set>
+            <if test="name!=null and name.length>0">name=#{name},</if>
+            <if test="password!=null and password.length>0">password=#{password},</if>
+            <if test="phone!=null and phone.length>0">phone=#{phone},</if>
+            <if test="idcard!=null and idcard.length>0">idcard=#{idcard},</if>
+        </set>
+        where customerid =#{customerid}
+    </update>
+
+    <select id="selectByPhone" resultType="com.situ.hotel.domain.entity.Customer">
+        select * from customer where phone=#{phone}
+    </select>
+
+    <select id="selectById" resultType="com.situ.hotel.domain.entity.Customer">
+        select * from customer where customerid =#{customerid}
+    </select>
+
+    <select id="select" resultType="com.situ.hotel.domain.entity.Customer">
+        select * from customer
+        <where>
+            <if test="name!=null and name.length>0">and name like concat('%',#{name},'%')</if>
+            <if test="phone!=null and phone.length>0">and phone like concat('%',#{phone},'%')</if>
+        </where>
+    </select>
+</mapper>

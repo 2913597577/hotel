@@ -1,0 +1,55 @@
+# 配置文件
+server:
+  port: 8080
+
+#数据库
+spring:
+  datasource:
+    # 驱动程序
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 连接字符串
+    url: jdbc:mysql://127.0.0.1:3306/hotel?serverTimezone=GMT%2b8
+    # 账号
+    username: root
+    # 密码  如果你的密码是纯数字，必须使用单引号包起来
+    password: '2913597577'
+    # 设置文件的上传大小
+  servlet:
+    multipart:
+      max-file-size: 100MB
+  data:
+    #配置Redis
+    redis:
+      ## 服务器IP
+      host: 127.0.0.1
+      ## 端口号
+      port: 6379
+      ## 数据库索引
+      database: 1
+      ## 数据库密码
+      password: ''
+      ## 超时时间
+      timeout: 5000
+      jedis:
+        pool:
+          ## 最大连接数
+          max-active: 50
+          ## 最大等待时间
+          max-wait: 300
+          ## 最大空闲连接
+          max-idle: 20
+          ## 最小空闲连接
+          min-idle: 2
+#配置mybatis
+mybatis:
+  #映射文件的目录
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    #打印sql日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #开启驼峰命名转换
+    map-underscore-to-camel-case: true
+
+#  文件上传路径
+upload:
+  path: E:/mypic/img/

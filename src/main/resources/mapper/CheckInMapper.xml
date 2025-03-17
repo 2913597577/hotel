@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.situ.hotel.mapper.CheckInMapper">
+    <insert id="insert">
+        insert into checkin (name,idcard,phone,number)
+            value (#{name},#{idcard},#{phone},#{number})
+    </insert>
+
+    <delete id="delete">
+        delete from checkin where checkinid =#{checkinid}
+    </delete>
+
+    <select id="selectById" resultType="com.situ.hotel.domain.entity.CheckIn">
+        SELECT * FROM checkin where checkinid=#{checkinid}
+    </select>
+
+    <select id="select" resultType="com.situ.hotel.domain.entity.CheckIn">
+        SELECT * FROM checkin
+        <where>
+            <if test="name!=null and name.length>0">and name like concat('%',#{name},'%')</if>
+            <if test="number!=null and number.length>0">and number like concat('%',#{number},'%')</if>
+        </where>
+    </select>
+</mapper>
+
+

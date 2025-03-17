@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.situ.hotel.mapper.ReplyMapper">
+    <select id="select" resultType="com.situ.hotel.domain.entity.Reply">
+        select replyid,reply.content as rcontent,`comment`.content as ccontent,username,replytime
+        from reply
+        left join `comment` on reply.commentid=`comment`.commentid
+        LEFT JOIN  user on reply.userid=`user`.userid
+        LEFT JOIN  booking on `comment`.bookingid=booking.bookingid
+        <where>
+            <if test="customerid!=null">and booking.customerid=#{customerid}</if>
+            <if test="username!=null and username.length>0">and username like concat('%',#{username},'%')</if>
+        </where>
+    </select>
+    <insert id="insert">
+        insert into reply (content,commentid,userid) values (#{rcontent},#{commentid},#{userid})
+    </insert>
+</mapper>
+
+
+
+

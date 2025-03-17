@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.situ.hotel.mapper.RoomMapper">
+    <insert id="insert">
+        insert into room
+            (name,number,price,area,facilities,typeid,photo)
+        values (#{name},#{number},#{price},#{area},#{facilities},#{typeid},#{photo})
+    </insert>
+
+    <delete id="delete">
+        delete from room
+        where roomid=#{roomid}
+    </delete>
+
+    <update id="update">
+        update room
+        <set>
+            <if test="name!=null and name.length>0">name=#{name},</if>
+            <if test="typeid!=null">typeid=#{typeid},</if>
+            <if test="price!=null">price=#{price},</if>
+            <if test="area!=null and area.length>0">area=#{area},</if>
+            <if test="photo!=null and photo.length>0">photo=#{photo},</if>
+            <if test="status!=null ">status=#{status},</if>
+            <if test="facilities!=null and facilities.length>0">facilities=#{facilities},</if>
+        </set>
+        where roomid =#{roomid}
+    </update>
+    <update id="updateStatus">
+        update room set status=#{status} where number =#{number}
+    </update>
+
+    <select id="selectById" resultType="com.situ.hotel.domain.entity.Room">
+        select roomid,number,name,price,status,area,facilities,typename,photo,room.typeid as typeid
+        from room join roomtype
+        on room.typeid=roomtype.typeid
+        where roomid =#{roomid}
+    </select>
+    <select id="selectByNumber" resultType="com.situ.hotel.domain.entity.Room">
+        select * from room where number=#{number}
+    </select>
+
+    <select id="selectByPrice" resultType="com.situ.hotel.domain.entity.Room">
+        <![CDATA[
+            select roomid,number,name,price,status,area,facilities,typename,photo,room.typeid as typeid
+            from room join roomtype
+            on room.typeid=roomtype.typeid
+            WHERE price >= #{low} AND price <= #{high}
+         ]]>
+<!--    <![CDATA[ ]]>  防止出现解析错误 如< > & 等    -->
+    </select>
+
+    <select id="select" resultType="com.situ.hotel.domain.entity.Room">
+
+        select roomid,number,name,price,status,area,facilities,typename,photo,room.typeid as typeid
+        from room join roomtype
+        on room.typeid=roomtype.typeid
+        <where>
+            <if test="name!=null and name.length>0">and name like concat('%',#{name},'%')</if>
+            <if test="number!=null and number.length>0">and number like concat('%',#{number},'%')</if>
+            <if test="facilities!=null and facilities.length>0">and facilities like concat('%',#{facilities},'%')</if>
+            <if test="typename!=null and typename.length>0">and typename =#{typename}</if>
+            <if test="low!=null ">and price >=#{low}</if>
+            <if test="high!=null ">and #{high}>=price</if>
+            <if test="status!=null">and status =#{status}</if>
+        </where>
+    </select>
+</mapper>

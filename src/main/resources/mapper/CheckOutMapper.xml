@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.situ.hotel.mapper.CheckOutMapper">
+    <insert id="insert">
+        insert into checkout (name,number) value (#{name},#{number})
+    </insert>
+
+    <delete id="delete">
+        delete from checkout where checkoutid =#{checkoutid}
+    </delete>
+
+    <select id="selectById" resultType="com.situ.hotel.domain.entity.CheckOut">
+        SELECT checkoutid,actualcheckouttime,deposit,number, name
+        FROM checkout
+        where checkoutid=#{checkoutid}
+    </select>
+
+    <select id="select" resultType="com.situ.hotel.domain.entity.CheckOut">
+        SELECT checkoutid,actualcheckouttime,deposit,number,name
+        FROM checkout
+        <where>
+            <if test="name!=null and name.length>0">and name like concat('%',#{name},'%')</if>
+            <if test="number!=null">and number like concat('%',#{number},'%')</if>
+        </where>
+    </select>
+</mapper>

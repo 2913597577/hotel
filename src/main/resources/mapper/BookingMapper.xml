@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.situ.hotel.mapper.BookingMapper">
+    <insert id="insert">
+        insert into booking
+        (customerid,roomid,checkindate,checkoutdate)
+        values (#{customerid},#{roomid},#{checkindate},#{checkoutdate})
+    </insert>
+    <delete id="delete">
+        delete from booking where bookingid=#{bookingid}
+    </delete>
+    <select id="selectById" resultType="com.situ.hotel.domain.entity.Booking">
+        select bookingid,checkindate,checkoutdate,bookingdate,
+               customer.name as name,phone,typename,photo,
+               (DATEDIFF(checkoutdate, checkindate)+1) * price AS price
+               from  booking
+               left join customer
+               on booking.customerid=customer.customerid
+               left join room
+               on booking.roomid=room.roomid
+               left join roomtype
+               on room.typeid=roomtype.typeid
+               where bookingid={bookingid}
+    </select>
+    <select id="select" resultType="com.situ.hotel.domain.entity.Booking">
+        select bookingid,checkindate,checkoutdate,bookingdate,
+               customer.name as name,phone,typename,photo,
+               (DATEDIFF(checkoutdate, checkindate)+1) * price AS price
+               from  booking
+               left join customer
+               on booking.customerid=customer.customerid
+               left join room
+               on booking.roomid=room.roomid
+               left join roomtype
+               on room.typeid=roomtype.typeid
+        <where>
+           <if test="name!=null and name.length>0">and customer.name like concat('%',#{name},'%')</if>
+           <if test="typename!=null and typename.length>0">and typename like concat('%',#{typename},'%')</if>
+           <if test="customerid!=null">and booking.customerid=#{customerid}</if>
+        </where>
+    </select>
+</mapper>
