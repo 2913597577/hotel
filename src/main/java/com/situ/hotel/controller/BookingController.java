@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/booking")
 public class BookingController {
+
     private final BookingService bookingService;
 
     @PostMapping
@@ -23,6 +24,7 @@ public class BookingController {
             return Result.error(e.getMessage());
         }
     }
+
     @DeleteMapping
     public Result remove(Integer id) {
         try {
@@ -33,15 +35,16 @@ public class BookingController {
             return Result.error(e.getMessage());
         }
     }
+
     @GetMapping("/{id}")
-    public Result getById( Integer id) {
+    public Result getById(Integer id) {
         return Result.success(bookingService.getById(id));
     }
 
     @GetMapping()
-    public Result search(Integer page,Integer size,Booking booking) {
+    public Result search(Integer page, Integer size, Booking booking) {
 
-        PageInfo pageInfo=bookingService.search(page,size,booking);
+        PageInfo pageInfo = bookingService.search(page, size, booking);
 
         return Result.success(pageInfo);
     }

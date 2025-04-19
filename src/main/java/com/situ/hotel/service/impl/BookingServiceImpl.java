@@ -6,6 +6,7 @@ import com.situ.hotel.domain.entity.Booking;
 import com.situ.hotel.mapper.BookingMapper;
 import com.situ.hotel.service.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,23 @@ public class BookingServiceImpl implements BookingService {
     //private final RedisUtil redisUtil;
     private final BookingMapper bookingMapper;
 
+    @Autowired
+    private final RoomRecommendationService roomRecommendationService;
+
     @Override
     public int add(Booking booking) throws Exception {
         //刷新Redis缓存
         //redisUtil.deletePattern("BookingCache:*");
+        Booking booking1 = new Booking();
+        booking1.setRoomid(booking.getRoomid());
+        List<Booking> list = bookingMapper.select(booking1);
+        for (Booking alreadyBooking : list) {
+            Boolean flag1 = booking.getCheckindate().before(alreadyBooking.getCheckoutdate()) && booking.getCheckindate().after(alreadyBooking.getCheckindate());
+            Boolean flag2 = booking.getCheckoutdate().before(alreadyBooking.getCheckoutdate()) && booking.getCheckoutdate().after(alreadyBooking.getCheckindate());
+            if (flag1 || flag2) {
+                throw new Exception("该房间已被预订");
+            }
+        }
         return bookingMapper.insert(booking);
     }
 

@@ -17,16 +17,19 @@ public class Booking implements Serializable {
     private Integer customerid;
     private Integer roomid;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GTM+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GTM+8")
     private Date checkindate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GTM+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GTM+8")
     private Date checkoutdate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GTM+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GTM+8")
     private Date bookingdate;
     private String name;
     private String phone;
     private BigDecimal price;
     private String typename;
     private String photo;
+    private String area;
+    private String facilities;
+    private String roomName;
 }

@@ -23,6 +23,7 @@ public class RoomController {
             return Result.error(e.getMessage());
         }
     }
+
     @PutMapping
     public Result edit(@RequestBody Room room) {
         try {
@@ -33,6 +34,7 @@ public class RoomController {
             return Result.error(e.getMessage());
         }
     }
+
     @DeleteMapping
     public Result remove(Integer roomid) {
         try {
@@ -43,16 +45,24 @@ public class RoomController {
             return Result.error(e.getMessage());
         }
     }
+
     @GetMapping("/{id}")
-    public Result getById(Integer roomid){
+    public Result getById(Integer roomid) {
         return Result.success(roomService.getById(roomid));
     }
+
     @GetMapping()
-    public Result search(Integer page, Integer size, Room room){
+    public Result search(Integer page, Integer size, Room room) {
         //1-获取参数
         //2-获取业务
         try {
-            PageInfo pageInfo = roomService.search(page, size, room);
+            PageInfo pageInfo;
+            if (room.getCustomerid() == null) {
+                pageInfo = roomService.search(page, size, room);
+            } else {
+                pageInfo = roomService.search1(page, size, room, room.getCustomerid());
+            }
+
             //3-返回数据
             return Result.success(pageInfo);
         } catch (Exception e) {
@@ -60,8 +70,9 @@ public class RoomController {
             return Result.error(e.getMessage());
         }
     }
+
     @GetMapping("/numberIn")
-    public Result getByNumber(String number){
+    public Result getByNumber(String number) {
         try {
             roomService.getByNumber(number);
             return Result.success();
@@ -70,8 +81,9 @@ public class RoomController {
             return Result.error(e.getMessage());
         }
     }
+
     @GetMapping("/numberOut")
-    public Result selectByNumber(String number){
+    public Result selectByNumber(String number) {
         try {
             roomService.selectByNumber(number);
             return Result.success();

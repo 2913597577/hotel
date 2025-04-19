@@ -20,4 +20,5 @@ public class Room {
     private String photo;
     private Double low;
     private Double high;
+    private Integer customerid;
 }

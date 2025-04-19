@@ -2,9 +2,6 @@ package com.situ.hotel.service;
 
 import com.github.pagehelper.PageInfo;
 import com.situ.hotel.domain.entity.Room;
-import com.situ.hotel.domain.entity.User;
-
-import java.util.List;
 
 public interface RoomService {
 
@@ -22,4 +19,6 @@ public interface RoomService {
     Room selectByNumber(String number) throws Exception;
 
     PageInfo search(Integer page, Integer size, Room room) throws Exception;
+
+    PageInfo search1(Integer page, Integer size, Room room, Integer customerid) throws Exception;
 }
