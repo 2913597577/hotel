@@ -3,7 +3,9 @@ package com.situ.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.situ.hotel.domain.entity.Room;
+import com.situ.hotel.domain.entity.User;
 import com.situ.hotel.mapper.RoomMapper;
+import com.situ.hotel.mapper.UserMapper;
 import com.situ.hotel.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.List;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
+    private final UserMapper userMapper;
     @Autowired
     private RoomRecommendationService roomRecommendationService;
 
@@ -66,9 +69,19 @@ public class RoomServiceImpl implements RoomService {
         return room;
     }
 
+    @Override
+    public int delist(Integer number) {
+        return roomMapper.updateIsDelist(number, 1);
+    }
+
 
     @Override
     public PageInfo search(Integer page, Integer size, Room room) throws Exception {
+
+        User user = userMapper.selectById(room.getUserid());
+        if (user.getRole() == 1) {
+            room.setUserid(null);
+        }
         if (room.getLow() != null && room.getHigh() != null) {
             if (room.getLow() >= room.getHigh()) {
                 throw new Exception("最低价格不能高于最高价格！");
@@ -88,13 +101,24 @@ public class RoomServiceImpl implements RoomService {
                 throw new Exception("最低价格不能高于最高价格！");
             }
         }
-        // 设置分页参数
-        PageHelper.startPage(page, size);
 
         // 调用推荐房间的方法
-        List<Room> recommendedRooms = roomRecommendationService.recommendRooms(customerid);
+        List<Room> allRecommendedRooms = roomRecommendationService.recommendRooms(customerid, room);
+
+        // 手动分页
+        int total = allRecommendedRooms.size();
+        int start = (page - 1) * size;
+        int end = Math.min(start + size, total);
+
+        List<Room> pagedRecommendedRooms = allRecommendedRooms.subList(start, end);
 
         // 创建分页对象
-        return new PageInfo<>(recommendedRooms);
+        PageInfo<Room> pageInfo = new PageInfo<>(pagedRecommendedRooms);
+        pageInfo.setPageNum(page);
+        pageInfo.setPageSize(size);
+        pageInfo.setTotal(total);
+
+        return pageInfo;
     }
+
 }

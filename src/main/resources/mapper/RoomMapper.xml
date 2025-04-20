@@ -7,13 +7,14 @@
 <mapper namespace="com.situ.hotel.mapper.RoomMapper">
     <insert id="insert">
         insert into room
-            (name,number,price,area,facilities,typeid,photo)
-        values (#{name},#{number},#{price},#{area},#{facilities},#{typeid},#{photo})
+            (name, number, price, area, facilities, typeid, photo, userid)
+        values (#{name}, #{number}, #{price}, #{area}, #{facilities}, #{typeid}, #{photo}, #{userid})
     </insert>
 
     <delete id="delete">
-        delete from room
-        where roomid=#{roomid}
+        delete
+        from room
+        where roomid = #{roomid}
     </delete>
 
     <update id="update">
@@ -30,35 +31,90 @@
         where roomid =#{roomid}
     </update>
     <update id="updateStatus">
-        update room set status=#{status} where number =#{number}
+        update room
+        set status=#{status}
+        where number = #{number}
+    </update>
+    <update id="updateIsDelist">
+        update room
+        set isdelist = #{isdelsit}
+        where roomid = #{roomid}
     </update>
 
     <select id="selectById" resultType="com.situ.hotel.domain.entity.Room">
-        select roomid,number,name,price,status,area,facilities,typename,photo,room.typeid as typeid
-        from room join roomtype
-        on room.typeid=roomtype.typeid
-        where roomid =#{roomid}
+        select roomid,
+               number,
+               name,
+               price,
+               status,
+               area,
+               facilities,
+               typename,
+               photo,
+               room.typeid as typeid,
+               companyname,
+               address,
+               phone
+        from room
+                 join roomtype
+                      on room.typeid = roomtype.typeid
+                 join company
+                      on room.userid = company.userid
+        where roomid = #{roomid}
+          and isdelist = 0
     </select>
     <select id="selectByNumber" resultType="com.situ.hotel.domain.entity.Room">
-        select * from room where number=#{number}
+        select *
+        from room
+        where number = #{number}
     </select>
 
     <select id="selectByPrice" resultType="com.situ.hotel.domain.entity.Room">
         <![CDATA[
-            select roomid,number,name,price,status,area,facilities,typename,photo,room.typeid as typeid
-            from room join roomtype
-            on room.typeid=roomtype.typeid
-            WHERE price >= #{low} AND price <= #{high}
+            select roomid,
+               number,
+               name,
+               price,
+               status,
+               area,
+               facilities,
+               typename,
+               photo,
+               room.typeid as typeid,
+               companyname,
+               address,
+               phone
+        from room
+                 join roomtype
+                      on room.typeid = roomtype.typeid
+                 join company
+                      on room.userid = company.userid
+            WHERE price >= #{low} AND price <= #{high} and isdelist = 0
          ]]>
-<!--    <![CDATA[ ]]>  防止出现解析错误 如< > & 等    -->
+        <!--    <![CDATA[ ]]>  防止出现解析错误 如< > & 等    -->
     </select>
 
     <select id="select" resultType="com.situ.hotel.domain.entity.Room">
-
-        select roomid,number,name,price,status,area,facilities,typename,photo,room.typeid as typeid
-        from room join roomtype
-        on room.typeid=roomtype.typeid
+        select roomid,
+        number,
+        name,
+        price,
+        status,
+        area,
+        facilities,
+        typename,
+        photo,
+        room.typeid as typeid,
+        companyname,
+        address,
+        phone
+        from room
+        join roomtype
+        on room.typeid = roomtype.typeid
+        join company
+        on room.userid = company.userid
         <where>
+            isdelist = 0
             <if test="name!=null and name.length>0">and name like concat('%',#{name},'%')</if>
             <if test="number!=null and number.length>0">and number like concat('%',#{number},'%')</if>
             <if test="facilities!=null and facilities.length>0">and facilities like concat('%',#{facilities},'%')</if>
@@ -66,6 +122,10 @@
             <if test="low!=null ">and price >=#{low}</if>
             <if test="high!=null ">and #{high}>=price</if>
             <if test="status!=null">and status =#{status}</if>
+            <if test="companyname!=null and companyname.length>0">and companyname like concat('%',#{companyname},'%')
+            </if>
+            <if test="address!=null and address.length>0">and address like concat('%',#{address},'%')</if>
+            <if test="userid !=null">and room.userid=#{userid}</if>
         </where>
     </select>
 </mapper>

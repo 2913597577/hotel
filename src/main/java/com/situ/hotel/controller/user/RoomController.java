@@ -93,4 +93,15 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/delist")
+    public Result delist(Integer number) {
+        try {
+            roomService.delist(number);
+            return Result.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error(e.getMessage());
+        }
+    }
+
 }

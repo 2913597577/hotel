@@ -1,6 +1,5 @@
 package com.situ.hotel.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.situ.hotel.domain.entity.Booking;
 import com.situ.hotel.domain.entity.Room;
 import com.situ.hotel.mapper.BookingMapper;
@@ -43,13 +42,11 @@ public class RoomRecommendationService {
     }
 
     // 为用户推荐房间
-    public List<Room> recommendRooms(Integer customerId) {
+    public List<Room> recommendRooms(Integer customerId, Room room1) {
         // 禁用 PageHelper 对 BookingMapper.selectByCustomerId 的影响
-        PageHelper.clearPage();
         List<Booking> userBookings = bookingMapper.selectByCustomerId(customerId);
 
-        // 禁用 PageHelper 对 RoomMapper.select 的影响
-        List<Room> rooms = roomMapper.select(null);
+        List<Room> rooms = roomMapper.select(room1);
 
         // 计算每个房间与用户历史订单房间的相似度
         Map<Room, Double> roomScores = new HashMap<>();

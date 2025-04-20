@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Room {
     private Integer roomid;
+    private Integer userid;
     private String number;
     private String name;
     private String typeid;
@@ -21,4 +22,8 @@ public class Room {
     private Double low;
     private Double high;
     private Integer customerid;
+    private String companyname;
+    private String address;
+    private String phone;
+    private Integer isdelist;
 }

@@ -18,6 +18,8 @@ public interface RoomService {
 
     Room selectByNumber(String number) throws Exception;
 
+    int delist(Integer number);
+
     PageInfo search(Integer page, Integer size, Room room) throws Exception;
 
     PageInfo search1(Integer page, Integer size, Room room, Integer customerid) throws Exception;
