@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.situ.hotel.mapper.CompanyMapper">
+    <select id="select" resultType="com.situ.hotel.domain.entity.Company">
+        select c.companyid,c.companyname,c.address,c.phone,u.username,c.registertime,c.status,
+               u.userid,c.description
+        from  company c
+        LEFT JOIN user u
+        on c.userid=u.userid
+        <where>
+<!--            <if test="companyid!=null">and c.companyid=#{companyid}</if>-->
+            <if test="companyname!=null and companyname.length>0">and c.companyname like concat('%',#{companyname},'%')</if>
+            <if test="address!=null and address.length>0">and c.address like concat('%',#{address},'%')</if>
+<!--            <if test="phone!=null and phone.length>0">and c.phone like concat('%',#{phone},'%')</if>-->
+            <if test="username!=null and username.length>0">and u.username like concat('%',#{username},'%')</if>
+            <if test="status!=null">and c.status=#{status}</if>
+<!--            <if test="userid!=null">and c.userid=#{userid}</if>-->
+            <if test="registertime!=null">and c.registertime=#{registertime}</if>
+        </where>
+    </select>
+    <insert id="insert">
+        insert into company (companyname,address,phone,userid,description)
+        values (#{companyname},#{address},#{phone},#{userid},#{description})
+    </insert>
+    <update id="update">
+        update company
+        <set>
+            <if test="companyname!=null and companyname.length>0">companyname=#{companyname},</if>
+            <if test="address!=null and address.length>0">address=#{address},</if>
+            <if test="phone!=null and phone.length>0">phone=#{phone},</if>
+            <if test="status!=null">status=#{status},</if>
+        </set>
+    </update>
+    <delete id="delete">
+        delete from company
+        where companyid=#{companyid}
+    </delete>
+    <select id="selectById" resultType="com.situ.hotel.domain.entity.Company">
+        select c.companyid,c.companyname,c.address,c.phone,u.username,c.registertime,c.status,
+               u.userid,c.description
+        from  company c
+        LEFT JOIN user u
+        on c.userid=u.userid
+        where c.companyid=#{companyid}
+    </select>
+    <select id="selectByUserId" resultType="com.situ.hotel.domain.entity.Company">
+        select c.companyid,c.companyname,c.address,c.phone,u.username,c.registertime,c.status,
+               u.userid,c.description
+        from  company c
+        LEFT JOIN user u
+        on c.userid=u.userid
+        where c.userid=#{userid}
+    </select>
+</mapper>

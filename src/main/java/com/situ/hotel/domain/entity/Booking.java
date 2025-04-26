@@ -32,4 +32,6 @@ public class Booking implements Serializable {
     private String area;
     private String facilities;
     private String roomName;
+    private String companyname;
+    private Integer companyid;
 }

@@ -16,4 +16,8 @@ public class Company {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GTM+8")
     private Date registertime;
     private String phone;
+    private Integer status;
+    private String description;
+    private String username;
+
 }

@@ -22,6 +22,8 @@
                customer.name                                     as name,
                phone,
                typename,
+               companyname,
+               companyid,
                photo,
                (DATEDIFF(checkoutdate, checkindate) + 1) * price AS price
         from booking
@@ -31,6 +33,8 @@
                            on booking.roomid = room.roomid
                  left join roomtype
                            on room.typeid = roomtype.typeid
+                 left join company
+                           on room.userid = company.userid
         where bookingid = #{bookingid}
     </select>
     <select id="selectByCustomerId" resultType="com.situ.hotel.domain.entity.Booking">
@@ -44,6 +48,8 @@
                typename,
                photo,
                area,
+               companyname,
+               companyid,
                facilities,
                room.name                                         as roomName,
                (DATEDIFF(checkoutdate, checkindate) + 1) * price AS price
@@ -54,12 +60,14 @@
                            on booking.roomid = room.roomid
                  left join roomtype
                            on room.typeid = roomtype.typeid
+                 left join company
+                           on room.userid = company.userid
         where booking.customerid = #{customerid}
     </select>
     <select id="select" resultType="com.situ.hotel.domain.entity.Booking">
         select bookingid,checkindate,checkoutdate,bookingdate,
-        customer.name as name,phone,typename,photo,
-        (DATEDIFF(checkoutdate, checkindate)+1) * price AS price
+        customer.name as name,phone,typename,photo,companyname,
+        companyid,(DATEDIFF(checkoutdate, checkindate)+1) * price AS price
         from booking
         left join customer
         on booking.customerid=customer.customerid
@@ -67,11 +75,14 @@
         on booking.roomid=room.roomid
         left join roomtype
         on room.typeid=roomtype.typeid
+        left join company
+        on room.userid = company.userid
         <where>
             <if test="name!=null and name.length>0">and customer.name like concat('%',#{name},'%')</if>
             <if test="typename!=null and typename.length>0">and typename like concat('%',#{typename},'%')</if>
             <if test="customerid!=null">and booking.customerid=#{customerid}</if>
             <if test="roomid!=null">and booking.roomid=#{roomid}</if>
+            <if test="companyname!=null">and companyname=#{companyname}</if>
         </where>
     </select>
 </mapper>
