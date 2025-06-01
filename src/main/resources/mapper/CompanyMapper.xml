@@ -32,7 +32,9 @@
             <if test="address!=null and address.length>0">address=#{address},</if>
             <if test="phone!=null and phone.length>0">phone=#{phone},</if>
             <if test="status!=null">status=#{status},</if>
+            <if test="description!=null and description.length>0">description=#{description},</if>
         </set>
+            where companyid=#{companyid}
     </update>
     <delete id="delete">
         delete from company

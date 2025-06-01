@@ -27,4 +27,14 @@ public class CommentServiceImpl implements CommentService {
         // 3 -创建分页对象
         return new PageInfo(list);
     }
+
+    @Override
+    public int remove(Integer commentid) throws Exception {
+        return commentMapper.delete(commentid);
+    }
+
+    @Override
+    public int edit(Comment comment) throws Exception {
+        return commentMapper.update(comment);
+    }
 }

@@ -22,5 +22,7 @@ public interface RoomService {
 
     PageInfo search(Integer page, Integer size, Room room) throws Exception;
 
+    PageInfo search2(Integer page, Integer size, Room room) throws Exception;
+
     PageInfo search1(Integer page, Integer size, Room room, Integer customerid) throws Exception;
 }

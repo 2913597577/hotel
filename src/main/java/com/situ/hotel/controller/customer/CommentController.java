@@ -27,4 +27,15 @@ public class CommentController {
             return Result.error(e.getMessage());
         }
     }
+
+    @DeleteMapping
+     public Result remove(@RequestParam Integer commentid) {
+        try {
+            commentService.remove(commentid);
+            return Result.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error(e.getMessage());
+        }
+    }
 }

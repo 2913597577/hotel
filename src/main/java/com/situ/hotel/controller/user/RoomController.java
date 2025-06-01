@@ -52,17 +52,20 @@ public class RoomController {
     }
 
     @GetMapping()
-    public Result search(Integer page, Integer size, Room room) {
+    public Result search(Integer page, Integer size, Room room,String lx) {
         //1-获取参数
         //2-获取业务
         try {
-            PageInfo pageInfo;
+            PageInfo pageInfo =  null;
             if (room.getCustomerid() == null) {
                 pageInfo = roomService.search(page, size, room);
-            } else {
+            }
+            else if("1".equals(lx)) {
                 pageInfo = roomService.search1(page, size, room, room.getCustomerid());
             }
-
+            else if ("2".equals(lx)){
+                pageInfo = roomService.search2(page, size, room);
+            }
             //3-返回数据
             return Result.success(pageInfo);
         } catch (Exception e) {

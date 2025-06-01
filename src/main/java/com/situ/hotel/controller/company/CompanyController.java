@@ -17,7 +17,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @PostMapping
-    public Result add(Company company){
+    public Result add(@RequestBody Company company){
         try {
             companyService.add(company);
             return Result.success();
@@ -27,7 +27,7 @@ public class CompanyController {
         }
     }
     @PutMapping
-    public Result edit(Company company){
+    public Result edit(@RequestBody Company company){
         try {
             companyService.edit(company);
             return Result.success();
@@ -37,7 +37,7 @@ public class CompanyController {
         }
     }
     @DeleteMapping
-    public Result remove(Integer companyid){
+    public Result remove(@RequestParam Integer companyid){
         try {
             companyService.remove(companyid);
             return Result.success();

@@ -28,4 +28,14 @@
         insert into comment (content,bookingid)
         values (#{content},#{bookingid})
     </insert>
+    <delete id="delete">
+        delete from comment where commentid =#{commentid}
+    </delete>
+    <update id="update">
+        update comment
+        <set>
+            <if test="content!=null and content.length>0">content=#{content},</if>
+        </set>
+        where commentid=#{commentid}
+    </update>
 </mapper>

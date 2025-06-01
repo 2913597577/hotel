@@ -95,6 +95,15 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public PageInfo search2(Integer page, Integer size, Room room) throws Exception {
+        PageHelper.startPage(page, size);
+        //2- 查询
+        List list = roomMapper.select(room); //执行时自动拼接limit
+        // 3 -创建分页对象
+        return new PageInfo(list);
+    }
+
+    @Override
     public PageInfo search1(Integer page, Integer size, Room room, Integer customerid) throws Exception {
         if (room.getLow() != null && room.getHigh() != null) {
             if (room.getLow() >= room.getHigh()) {
