@@ -17,7 +17,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @PostMapping
-    public Result add(@RequestBody Company company){
+    public Result add(@RequestBody Company company) {
         try {
             companyService.add(company);
             return Result.success();
@@ -26,39 +26,43 @@ public class CompanyController {
             return Result.error(e.getMessage());
         }
     }
+
     @PutMapping
-    public Result edit(@RequestBody Company company){
+    public Result edit(@RequestBody Company company) {
         try {
             companyService.edit(company);
             return Result.success();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.error(e.getMessage());
         }
     }
-    @DeleteMapping
-    public Result remove(@RequestParam Integer companyid){
+
+    @DeleteMapping("/{companyId}")
+    public Result remove(@PathVariable("companyId") Integer companyId) {
         try {
-            companyService.remove(companyid);
+            companyService.remove(companyId);
             return Result.success();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.error(e.getMessage());
         }
     }
+
     @GetMapping("/{id}")
-    public Result getById(@PathVariable("id") Integer companyid){
+    public Result getById(@PathVariable("id") Integer companyid) {
         try {
             Company company = companyService.getById(companyid);
             return Result.success(company);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.error(e.getMessage());
         }
     }
+
     @GetMapping
     public Result search(Integer page, Integer size, Company company) {
-        if (page == null){
+        if (page == null) {
             List<Company> list = companyService.selectByUserId(company.getUserid());
             return Result.success(list);
         }

@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
+
     @GetMapping
     public Result search(Integer page, Integer size, Comment comment) {
-        PageInfo pageInfo=commentService.search(page, size, comment);
+        PageInfo pageInfo = commentService.search(page, size, comment);
         return Result.success(pageInfo);
     }
+
     @PostMapping
     public Result add(@RequestBody Comment comment) {
         try {
@@ -28,8 +30,8 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping
-     public Result remove(@RequestParam Integer commentid) {
+    @DeleteMapping("/{commentid}")
+    public Result remove(@PathVariable("commentid") Integer commentid) {
         try {
             commentService.remove(commentid);
             return Result.success();
